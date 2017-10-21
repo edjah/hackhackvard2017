@@ -9,8 +9,10 @@ import {
   Platform,
   StyleSheet,
   Text,
-  View
+  View,
+  Button
 } from 'react-native';
+
 
 import { readTag, writeTag } from 'nfc-react-native';
 
@@ -21,8 +23,23 @@ const instructions = Platform.select({
     'Shake or press menu button for dev menu',
 });
 
+
 export default class App extends Component<{}> {
+  handleClick() {
+    readTag([{ sector: 5, bloques: [1,2], clave: 'FFFFFFFFFFFF', tipoClave: 'A' },
+        { sector: 6, bloques: [0,1,2], clave: 'FFFFFFFFFFFF', tipoClave: 'A' },
+        { sector: 4, bloques: [0], clave: 'FFFFFFFFFFFF', tipoClave: 'A' }])
+      .then((card) => {
+        console.log(card)
+        // returns Object {lectura: Array[3], card: "A3F813DB"}
+      }).catch((err) => {
+        console.log(err.message)
+      });
+  }
+
   render() {
+    alert("Hello");
+
     return (
       <View style={styles.container}>
         <Text style={styles.welcome}>
@@ -34,6 +51,7 @@ export default class App extends Component<{}> {
         <Text style={styles.instructions}>
           {instructions}
         </Text>
+        <Button title={"hello"} onPress={e => this.handleClick(e)}>Testing</Button>
       </View>
     );
   }
