@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     paddingTop: Constants.statusBarHeight,
     paddingBottom: 50
-  },
+  }
 });
 
 Expo.registerRootComponent(Main);
