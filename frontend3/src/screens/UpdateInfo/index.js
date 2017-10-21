@@ -4,8 +4,12 @@ import {
   ScrollView,
   StyleSheet,
   View,
-  Button
-} from "react-native"
+  Button,
+  StatusBar,
+  AsyncStorage
+} from "react-native";
+import { FormLabel, FormInput } from 'react-native-elements';
+
 import PropTypes from "prop-types"
 
 export default class UpdateInfo extends Component {
@@ -15,12 +19,108 @@ export default class UpdateInfo extends Component {
 
   constructor(props) {
     super(props);
+
+    this.state = {
+      requiredFields: {
+        name: "",
+        number: ""
+      },
+      optionalFields: {
+        email: "",
+        facebook: ""
+      },
+      newField: {
+        name: "",
+        value: ""
+      }
+    };
   }
 
-  render() {
+  _handleRequiredFieldChange = (text, key) => {
+    this.setState({requiredFields: {...this.state.requiredFields, [key]: text}});
+  }
+
+  _handleOptionalFieldChange = (text, key) => {
+    this.setState({optionalFields: {...this.state.optionalFields, [key]: text}});
+  }
+
+  _deleteField = key => {
+    optionalFieldsCopy = {...this.state.optionalFields};
+
+    delete optionalFieldsCopy[key];
+    this.setState({optionalFields: optionalFieldsCopy});
+  }
+
+  _addNewField = (name, value) => {
+    if (name === "") {
+      return;
+    }
+
+    optionalFieldsCopy = {...this.state.optionalFields};
+
+    optionalFieldsCopy[name.toLowerCase()] = value;
+
+    this.setState({optionalFields: optionalFieldsCopy, newField: {name: "", value: ""}});
+  }
+
+  _done = () => {
+    const { navigate } = this.props.navigation;
+
+    try {
+      AsyncStorage.setItem("myInfo", JSON.stringify(this.state))
+        .then(_ => {
+          console.log(JSON.stringify(this.state));
+          navigate("SelectInfo");
+        });
+    } catch (error) {
+      alert("We had trouble saving your data. Try again in a second");
+    }
+  }
+
+  render = () => {
     return (
       <ScrollView style={styles.view}>
-        <Text style={styles.header}>{"Hello World"}</Text>
+        <StatusBar hidden={true}/>
+        {Object.keys(this.state.requiredFields).map((key, index) => {
+          return (
+            <View key={index}>
+              <FormLabel>{key.toUpperCase()}</FormLabel>
+              <FormInput
+                onChangeText={(text) => this._handleRequiredFieldChange(text, key)}
+                placeholder={`Please enter your ${key}`}
+                value={this.state.requiredFields[key]} />
+            </View>
+          );
+        })}
+        {Object.keys(this.state.optionalFields).map((key, index) => {
+          return (
+            <View key={index}>
+              <FormLabel>{key.toUpperCase()}</FormLabel>
+              <View>
+                <FormInput
+                  onChangeText={(text) => this._handleOptionalFieldChange(text, key)}
+                  placeholder={`(Optional) Please enter your ${key}`}
+                  value={this.state.optionalFields[key]} />
+                <Button title="X" onPress={() => this._deleteField(key)} />
+              </View>
+            </View>
+          );
+        })}
+        <FormLabel>NEW FIELD</FormLabel>
+        <FormInput
+          onChangeText={(text) => this.setState({newField: {...this.state.newField, name: text}})}
+          placeholder="Name of new field"
+          value={this.state.newField.name} />
+        <FormInput
+          onChangeText={(text) => this.setState({newField: {...this.state.newField, value: text}})}
+          placeholder="Value"
+          value={this.state.newField.value} />
+        <Button
+          onPress={() => this._addNewField(this.state.newField.name, this.state.newField.value)}
+          title="Add new field" />
+        <View style={{height: 10}} />
+        <Button onPress={this._done} title="Done!"/>
+        <View style={{height: 10}} />
       </ScrollView>
     )
   }
@@ -29,9 +129,9 @@ export default class UpdateInfo extends Component {
 const styles = StyleSheet.create({
   view: {
     flex: 1,
-    height: 10,
-    padding: 20,
-    backgroundColor: "#ababab",
-  },
+    paddingLeft: 20,
+    paddingRight: 20,
+    backgroundColor: "#ffffff"
+  }
 });
 
