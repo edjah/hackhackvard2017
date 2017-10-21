@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import {
-  Text,
   ScrollView,
   StyleSheet,
   View,
@@ -8,13 +7,13 @@ import {
   StatusBar,
   AsyncStorage
 } from "react-native";
-import { FormLabel, FormInput } from 'react-native-elements';
+import { Text, FormLabel, FormInput, CheckBox } from 'react-native-elements';
 
 import PropTypes from "prop-types"
 
 export default class SelectInfo extends Component {
   static navigationOptions = {
-    title: 'Select',
+    title: "Select",
   };
 
   constructor(props) {
@@ -22,116 +21,109 @@ export default class SelectInfo extends Component {
 
     this.state = {
       loaded: false,
-      fields: {}
+      fields: null,
+      selected: new Set()
     };
   }
 
+  _goToUpdate = () => {
+    const { navigate } = this.props.navigation;
+
+    navigate("UpdateInfo");
+  }
+
+  _isSelected = key => {
+    return this.state.selected.has(key);
+  }
+
+  _handleCheckBoxPress = key => {
+    let newSet = new Set(this.state.selected.values());
+
+    if (this._isSelected(key)) {
+      newSet.delete(key);
+    } else {
+      newSet.add(key);
+    }
+
+    this.setState({ selected: newSet });
+  }
+
   render = () => {
-    if (!loaded) {
+    if (!this.state.loaded) {
       try {
-        const info = await AsyncStorage.getItem("myInfo");
-        if (const !== null) {
-          let ret = {};
+        AsyncStorage.getItem("myInfo")
+          .then(info => {
+            if (info !== null) {
+              info = JSON.parse(info);
+              let ret = {};
 
-          for (let key in info.requiredFields) {
-            if (info.requiredFields.hasOwnProperty(key)) {
-              ret[key] = info.requiredFields[key];
+              for (let key in info.requiredFields) {
+                if (info.requiredFields.hasOwnProperty(key) && info.requiredFields[key] !== "") {
+                  ret[key] = info.requiredFields[key];
+                }
+              }
+
+              for (let key in info.optionalFields) {
+                if (info.optionalFields.hasOwnProperty(key) && info.optionalFields[key] !== "") {
+                  ret[key] = info.optionalFields[key];
+                }
+              }
+
+              if (Object.keys(ret).length > 0) {
+                this.setState({ fields: ret, loaded: true });
+              }
             }
-          }
-
-          for (let key in info.optionalFields) {
-            if (info.optionalFields.hasOwnProperty(key)) {
-              ret[key] = info.optionalFields[key];
-            }
-          }
-
-          this.setState({ fields: ret, loaded: true });
-        }
+          });
       } catch (error) {
         alert("We were unable to fetch your data! Tap the button to try again.");
+        contents = <Text>Hello</Text>;
       }
     }
-  }
 
-  _handleFieldChange = (text, key) => {
-    this.setState({optionalFields: {...this.state.optionalFields, [key]: text}});
-  }
-
-  _deleteField = key => {
-    optionalFieldsCopy = {...this.state.optionalFields};
-
-    delete optionalFieldsCopy[key];
-    this.setState({optionalFields: optionalFieldsCopy});
-  }
-
-  _addNewField = (name, value) => {
-    if (name === "") {
-      return;
+    let contents;
+    if (!this.state.fields) {
+      contents = (
+        <View>
+          <Text>It looks like you haven't filled in your information yet! Click the button below to get started.</Text>
+          <Button title="Register" onPress={this._goToUpdate} />
+        </View>
+      );
+    } else {
+      contents = (
+        <View>
+          <Text h1>{this.state.fields.name}</Text>
+          {Object.keys(this.state.fields).map((key, index) => {
+            if (key === "name") {
+              return null;
+            }
+            return (
+              <View key={index}>
+                <CheckBox
+                  checked={this._isSelected(key)}
+                  onPress={() => this._handleCheckBoxPress(key)}
+                  title={`${key.toUpperCase()}: ${this.state.fields[key]}`} />
+              </View>
+            );
+          })}
+        </View>
+      );
     }
 
-    optionalFieldsCopy = {...this.state.optionalFields};
-
-    optionalFieldsCopy[name.toLowerCase()] = value;
-
-    this.setState({optionalFields: optionalFieldsCopy, newField: {name: "", value: ""}});
-  }
-
-  _done = () => {
-
-  }
-
-  render = () => {
     return (
-      <ScrollView style={styles.view}>
-        <StatusBar hidden={true}/>
-        {Object.keys(this.state.requiredFields).map((key, index) => {
-          return (
-            <View key={index}>
-              <FormLabel>{key.toUpperCase()}</FormLabel>
-              <FormInput placeholder={`Please enter your ${key}`} />
-            </View>
-          );
-        })}
-        {Object.keys(this.state.optionalFields).map((key, index) => {
-          return (
-            <View key={index}>
-              <FormLabel>{key.toUpperCase()}</FormLabel>
-              <View>
-                <FormInput
-                  onChangeText={(text) => this._handleFieldChange(text, key)}
-                  placeholder={`(Optional) Please enter your ${key}`}
-                  value={this.state.optionalFields[key]} />
-                <Button title="X" onPress={() => this._deleteField(key)} />
-              </View>
-            </View>
-          );
-        })}
-        <FormLabel>NEW FIELD</FormLabel>
-        <FormInput
-          onChangeText={(text) => this.setState({newField: {...this.state.newField, name: text}})}
-          placeholder="Name of new field"
-          value={this.state.newField.name} />
-        <FormInput
-          onChangeText={(text) => this.setState({newField: {...this.state.newField, value: text}})}
-          placeholder="Value"
-          value={this.state.newField.value} />
-        <Button
-          onPress={() => this._addNewField(this.state.newField.name, this.state.newField.value)}
-          title="Add new field" />
-        <View style={{height: 10}} />
-        <Button onPress={this._done} title="Done!"/>
-        <View style={{height: 10}} />
+      <ScrollView contentContainerStyle={styles.sv}>
+        <StatusBar hidden={true} />
+        {contents}
       </ScrollView>
-    )
+    );
   }
 }
 
 const styles = StyleSheet.create({
-  view: {
-    flex: 1,
-    paddingLeft: 20,
-    paddingRight: 20,
-    backgroundColor: "#ffffff"
+  sv: {
+    padding: 20,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#ffffff",
+    flex: 1
   }
 });
-

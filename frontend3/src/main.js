@@ -6,7 +6,7 @@ import createRootNavigator from './navigations/RootNavigator';
 class Main extends Component {
 
   render() {
-    const Layout = createRootNavigator(false);
+    const Layout = createRootNavigator;
     return (
       <Layout />
     )
