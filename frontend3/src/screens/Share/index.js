@@ -26,7 +26,9 @@ export default class Share extends Component {
     return (
       <ScrollView style={styles.view}>
         <Text style={styles.header}>{"Hello World Share"}</Text>
-        <QRCode value="hello world" />
+        <View style={{width: 1000, height:1000}}>
+        <QRCode value="hello world" size={300}/>
+        </View>
       </ScrollView>
     )
   }
