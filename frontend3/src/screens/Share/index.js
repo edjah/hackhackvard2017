@@ -4,7 +4,8 @@ import {
   ScrollView,
   StyleSheet,
   View,
-  Button
+  Button,
+  Vibration
 } from "react-native"
 import PropTypes from "prop-types"
 import QRCode from 'react-native-qrcode-svg';
@@ -29,6 +30,7 @@ export default class Share extends Component {
 
   onRead = (t, e) => {
     let accts = JSON.parse(e);
+    Vibration.vibrate(600);
     if (t === "QR_CODE" /* && make sure data contains at least one acct we have */){
       this.setState({buttonVisible: true, scanning: false, data: accts});
     }
@@ -49,6 +51,7 @@ export default class Share extends Component {
   render() {
     const { state } = this.props.navigation;
     const qr_string = JSON.stringify(state.params);
+    console.log(state.params);
     return (
       <View style={styles.view}>
           {this.state.scanning &&

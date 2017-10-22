@@ -8,13 +8,14 @@ import {
   StatusBar,
   AsyncStorage,
   Image,
-  KeyboardAvoidingView
+  KeyboardAvoidingView,
+  Vibration
 } from "react-native";
 import { FormLabel, FormInput } from 'react-native-elements';
 import ModalDropdown from 'react-native-modal-dropdown';
 import { HeaderBackButton } from 'react-navigation';
 
-import PropTypes from "prop-types"
+// import PropTypes from "prop-types"
 
 export default class UpdateInfo extends Component {
   constructor(props) {
@@ -61,7 +62,6 @@ export default class UpdateInfo extends Component {
 
   _done = () => {
     const { navigate } = this.props.navigation;
-
     try {
       AsyncStorage.setItem("myInfo", JSON.stringify(this.state))
         .then(_ => {
@@ -118,7 +118,7 @@ export default class UpdateInfo extends Component {
         })}
         </KeyboardAvoidingView>
       </ScrollView>
-    )
+    );
   }
 }
 
