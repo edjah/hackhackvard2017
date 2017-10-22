@@ -10,9 +10,9 @@ import {
 } from "react-native";
 import { FormLabel, FormInput } from 'react-native-elements';
 //import TwitterApi from '../../../api.js';
-import OAuthManager from 'react-native-oauth';
+// import OAuthManager from 'react-native-oauth';
 
-import PropTypes from "prop-types"
+// import PropTypes from "prop-types"
 
 export default class UpdateInfo extends Component {
   static navigationOptions = {
@@ -115,20 +115,20 @@ export default class UpdateInfo extends Component {
   }
 
   componentDidMount = () => {
-    const manager = new OAuthManager('contact');
-    console.log(manager)
-    manager.configure({
-      twitter: {
-        consumer_key: 'c48R8Xcp37vMZnGI38FPTYJvS',
-        consumer_secret: 'shixG6oUg5xCYB6LqcDGMdj4yaneiZ1GAZmfK8rbLqHKKnSqNl'
-      }
-    });
-    manager.authorize('twitter')
-      .then(resp => {
-        console.log('Your users ID', resp);
-      }, e => {
-        console.log('There was an error', e);
-      });
+    // const manager = new OAuthManager('contact');
+    // console.log(manager)
+    // manager.configure({
+    //   twitter: {
+    //     consumer_key: 'c48R8Xcp37vMZnGI38FPTYJvS',
+    //     consumer_secret: 'shixG6oUg5xCYB6LqcDGMdj4yaneiZ1GAZmfK8rbLqHKKnSqNl'
+    //   }
+    // });
+    // manager.authorize('twitter')
+    //   .then(resp => {
+    //     console.log('Your users ID', resp);
+    //   }, e => {
+    //     console.log('There was an error', e);
+    //   });
 
 
     const { state } = this.props.navigation;

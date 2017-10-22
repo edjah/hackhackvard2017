@@ -1,11 +1,11 @@
 import React, { Component } from "react"
 import {
-  Text,
   ScrollView,
   StyleSheet,
   View,
   Button
 } from "react-native"
+import { Text } from "react-native-elements";
 import PropTypes from "prop-types"
 import QRCode from 'react-native-qrcode-svg';
 import { Permissions } from 'expo';
@@ -34,8 +34,13 @@ export default class AddFriend extends Component {
     console.log(accts);
     return (
       <View style={styles.view}>
+        <Text h1>{accts.name}</Text>
         <View>
-          {accts.map((acct, i) => <Text key={i}>{acct[0]+": "+acct[1]}</Text>)}
+          {accts.map((acct, i) => {
+            return (
+              <Text key={i}>{acct[0]+": "+acct[1]}</Text>
+            );
+          })}
         </View>
         <Button title="New Contact!" onPress={this.newContact} />
       </View>
