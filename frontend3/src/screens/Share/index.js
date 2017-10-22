@@ -20,10 +20,26 @@ export default class Share extends Component {
 
   constructor(props) {
     super(props);
+    this.state = {
+      buttonVisible: false,
+      scanning: true,
+      data: null,
+    }
   }
 
-  onRead = (e) => {
+  onRead = (t, e) => {
     console.log(e);
+    let accts = JSON.parse(e);
+    if (t === "QR_CODE" /* && make sure data contains at least one acct we have */){
+      this.setState({buttonVisible: true, scanning: false, data: accts});
+    }
+  }
+
+  toNext = () => {
+    const {navigate} = this.props.navigation;
+    let params = { data: this.state.data };
+    this.setState({buttonVisible: false, scanning: true, data: null});
+    navigate("AddFriend", params);
   }
 
   async componentWillMount() {
@@ -32,12 +48,19 @@ export default class Share extends Component {
   }
 
   render() {
+    const { state } = this.props.navigation;
+    const qr_string = JSON.stringify(state.params);
     return (
       <View style={styles.view}>
-          <View style={styles.sc}>
-            <Scanner style={styles.cam} onRead={this.onRead} />
-          </View>
-          <QRCode value="hello world" size={300}/>
+          {this.state.scanning &&
+            <View style={styles.sc}>
+              <Scanner style={styles.cam} onRead={this.onRead} />
+            </View>
+          }
+          {this.state.buttonVisible &&
+            <Button title="Done!" onPress={this.toNext} />
+          }
+          <QRCode value={qr_string} size={300}/>
       </View>
     )
   }

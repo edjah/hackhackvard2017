@@ -36,7 +36,11 @@ export default class UpdateInfo extends Component {
     };
   }
 
-  _handleFieldChange = (text, key) => {
+  _handleRequiredFieldChange = (text, key) => {
+    this.setState({requiredFields: {...this.state.requiredFields, [key]: text}});
+  }
+
+  _handleOptionalFieldChange = (text, key) => {
     this.setState({optionalFields: {...this.state.optionalFields, [key]: text}});
   }
 
@@ -60,7 +64,17 @@ export default class UpdateInfo extends Component {
   }
 
   _done = () => {
+    const { navigate } = this.props.navigation;
 
+    try {
+      AsyncStorage.setItem("myInfo", JSON.stringify(this.state))
+        .then(_ => {
+          console.log(JSON.stringify(this.state));
+          navigate("SelectInfo");
+        });
+    } catch (error) {
+      alert("We had trouble saving your data. Try again in a second");
+    }
   }
 
   render = () => {
@@ -71,7 +85,10 @@ export default class UpdateInfo extends Component {
           return (
             <View key={index}>
               <FormLabel>{key.toUpperCase()}</FormLabel>
-              <FormInput placeholder={`Please enter your ${key}`} />
+              <FormInput
+                onChangeText={(text) => this._handleRequiredFieldChange(text, key)}
+                placeholder={`Please enter your ${key}`}
+                value={this.state.requiredFields[key]} />
             </View>
           );
         })}
@@ -81,7 +98,7 @@ export default class UpdateInfo extends Component {
               <FormLabel>{key.toUpperCase()}</FormLabel>
               <View>
                 <FormInput
-                  onChangeText={(text) => this._handleFieldChange(text, key)}
+                  onChangeText={(text) => this._handleOptionalFieldChange(text, key)}
                   placeholder={`(Optional) Please enter your ${key}`}
                   value={this.state.optionalFields[key]} />
                 <Button title="X" onPress={() => this._deleteField(key)} />
