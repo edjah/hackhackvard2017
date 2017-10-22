@@ -4,15 +4,18 @@ import {
   StyleSheet,
   View,
   StatusBar,
-  AsyncStorage
+  AsyncStorage,
+  ActivityIndicator,
 } from "react-native";
-import { Button, Text, FormLabel, FormInput, CheckBox } from 'react-native-elements';
+import { Text, FormLabel, FormInput, CheckBox } from 'react-native-elements';
+import Button from '../../components/Button';
 
 import PropTypes from "prop-types"
 
 export default class SelectInfo extends Component {
   static navigationOptions = {
     title: "Select",
+    headerLeft: null,
   };
 
   constructor(props) {
@@ -91,44 +94,50 @@ export default class SelectInfo extends Component {
               }
 
               if (Object.keys(ret).length > 0) {
-                this.setState({ fields: ret, loaded: true });
-              }
+                this.setState({ fields: ret});
+              } 
             }
+            this.setState({ loaded: true });
           });
       } catch (error) {
         alert("We were unable to fetch your data! Tap the button to try again.");
       }
     }
 
-    let contents;
-    if (!this.state.fields) {
-      contents = (
-        <View>
-          <Text h2>It looks like you haven't filled in your information yet! Click the button below to get started.</Text>
-          <Button title="Register" backgroundColor="#397af8" onPress={this._goToUpdate} />
-        </View>
-      );
-    } else {
-      contents = (
-        <View>
-          <Text h1>{this.state.fields.name}</Text>
-          {Object.keys(this.state.fields).map((key, index) => {
-            if (key === "name") {
-              return null;
-            }
-            return (
-              <CheckBox
-                key={index}
-                checked={this._isSelected(key)}
-                onPress={() => this._handleCheckBoxPress(key)}
-                title={`${key.toUpperCase()}: ${this.state.fields[key]}`} />
-            );
-          })}
-          <Button title="SHARE" backgroundColor="#397af8" onPress={this._goToSharing} />
-          <Button title="EDIT" backgroundColor="green" onPress={this._goToUpdate} />
-          <Button title="DELETE" backgroundColor="red" onPress={this._delete} />
-        </View>
-      );
+    let contents = <ActivityIndicator />;
+    if (this.state.loaded) {
+      if (!this.state.fields) {
+        contents = (
+          <View>
+            <Text h2>It looks like you haven't filled in your information yet! Click the button below to get started.</Text>
+            <Button title="Register" backgroundColor="#397af8" onPress={this._goToUpdate} />
+          </View>
+        );
+      } else {
+        contents = (
+          <View style={styles.container}>
+            <View style={styles.topView}>
+              <Text h1>{this.state.fields.name}</Text>
+              {Object.keys(this.state.fields).map((key, index) => {
+                if (key === "name") {
+                  return null;
+                }
+                return (
+                  <CheckBox
+                    key={index}
+                    checked={this._isSelected(key)}
+                    onPress={() => this._handleCheckBoxPress(key)}
+                    title={`${key.toUpperCase()}: ${this.state.fields[key]}`} />
+                );
+              })}
+            </View>
+            <View style={styles.bottomView}>
+              <Button style={styles.button} title="SHARE" onPress={this._goToSharing} />
+              <Button style={styles.button} title="EDIT" onPress={this._goToUpdate} />
+            </View>
+          </View>
+        );
+      }
     }
 
     return (
@@ -147,5 +156,23 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#ffffff",
     flex: 1
+  },
+  topView: {
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  bottomView: {
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  container: {
+    flexDirection: 'column',
+    justifyContent: 'space-between'
+  },
+  buttonWrap: {
+    borderRadius: 15,
+    height: 20,
+    width: 100,
   }
 });

@@ -3,7 +3,6 @@ import {
   ScrollView,
   StyleSheet,
   View,
-  Button,
   Linking
 } from 'react-native'
 import { Text } from 'react-native-elements';
@@ -13,6 +12,7 @@ import { Permissions } from 'expo';
 import {
   Scanner
 } from '../../components'
+import Button from '../../components/Button';
 
 import Contacts from 'react-native-contacts'
 
@@ -20,15 +20,16 @@ import Contacts from 'react-native-contacts'
 export default class AddFriend extends Component {
   static navigationOptions = {
     title: 'Shared Accounts',
+    headerLeft: null,
   }
 
   constructor(props) {
     super(props);
   }
 
-  newContact = () => {
+  goBack = () => {
     const { navigate } = this.props.navigation;
-    // navigate(/*old page*/)
+    navigate('SelectInfo');
   }
 
   render() {
@@ -54,6 +55,7 @@ export default class AddFriend extends Component {
         number: shared_media['phone']
       }]
     }
+
 
     const accts = Object.entries(shared_media).filter(x => x[0] in media);
     let social_media = [];
@@ -81,7 +83,7 @@ export default class AddFriend extends Component {
             </Text>
           );
         })}
-        <Button title='New Contact!' onPress={this.newContact} />
+        <Button title='Return' onPress={this.goBack} />
       </View>
     )
   }

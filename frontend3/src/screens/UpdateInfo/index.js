@@ -4,7 +4,6 @@ import {
   ScrollView,
   StyleSheet,
   View,
-  Button,
   StatusBar,
   AsyncStorage,
   Image,
@@ -14,6 +13,7 @@ import {
 import { FormLabel, FormInput } from 'react-native-elements';
 import ModalDropdown from 'react-native-modal-dropdown';
 import { HeaderBackButton } from 'react-navigation';
+import Button from '../../components/Button';
 
 // import PropTypes from "prop-types"
 
@@ -41,7 +41,7 @@ export default class UpdateInfo extends Component {
     const {params = {}} = navigation.state;
     return {
       title: 'Info',
-      headerLeft: <HeaderBackButton onPress={() => params.beforeLeave()} />
+      headerLeft: <HeaderBackButton onPress={() => params.beforeLeave()} />,
     }
   }
 

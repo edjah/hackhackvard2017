@@ -6,13 +6,26 @@ import AddFriend from '../screens/AddFriend'
 import SelectInfo from "../screens/SelectInfo";
 
 export default createRootNavigator = StackNavigator({
-    SelectInfo: { screen: SelectInfo },
-    AddFriend: { screen: AddFriend },
+    SelectInfo: { screen: SelectInfo,
+      navigationOptions:{
+        gesturesEnabled:false,
+      }
+    },
+    AddFriend: { screen: AddFriend,
+      navigationOptions:{
+        gesturesEnabled:false,
+      }
+    },
     UpdateInfo: { screen: UpdateInfo },
-    Share: { screen: Share },
+    Share: { screen: Share,
+      navigationOptions:{
+        gesturesEnabled:false,
+      }
+    },
 },
 {
-  cardStyle: {
-      paddingTop: Platform.OS === 'ios' ? 0 : StatusBar.currentHeight
-    }
+  navigationOptions: {
+    gesturesEnabled:false,
+  },
+  initialRouteName: "SelectInfo",
 });
