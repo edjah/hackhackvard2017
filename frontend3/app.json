@@ -2,6 +2,12 @@
   "expo": {
     "name": "Contact",
     "sdkVersion": "21.0.0",
-    "entryPoint": "src/main.js"
-  }
+    "entryPoint": "src/main.js",
+    "android": {
+      "package": "com.contact.hackharvard",
+    },
+  },
+   "ios": {
+     "bundleIdentifier": "com.contact.hackharvard",
+   }
 }

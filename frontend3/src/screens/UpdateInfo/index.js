@@ -108,7 +108,7 @@ export default class UpdateInfo extends Component {
           return (
             <View key={index} style={styles.listItem}>
               <Image style={[styles.logo, this.getTintStyle(this.state.requiredFields[key] !== "")]} source={LOGOS[key]} />
-              <FormInput
+              <FormInput inputStyle={styles.input} underlineColorAndroid={'rgba(0,0,0,0)'}
                 onChangeText={(text) => this._handleRequiredFieldChange(text, key)}
                 placeholder={`Please enter your ${key}`}
                 value={this.state.requiredFields[key]} />
@@ -145,6 +145,10 @@ const styles = StyleSheet.create({
     width: 30,
     height: 30,
     margin: 10,
+  },
+  input: {
+    fontSize: 20,
+    fontWeight: 'bold',
   }
 });
 

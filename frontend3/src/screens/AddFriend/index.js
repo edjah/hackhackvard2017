@@ -42,40 +42,23 @@ export default class AddFriend extends Component {
       snapchat: x => 'https://www.snapchat.com/add/' + x,
       linkedin: x => 'https://www.linkedin.com/in/' + x,
     }
-
-    let newContact = {
-      givenName: shared_media['name'].split(' ')[0],
-      familyName: shared_media['name'].split(' ').slice(1).join(' '),
-      emailAddresses: [{
-        label: 'work',
-        email: shared_media['email']
-      }],
-      phoneNumbers: [{
-        label: 'mobile',
-        number: shared_media['phone']
-      }]
-    }
-
+    /*
+    let vCard = vCard();
+    vCard.firstName = shared_media['name'].split(' ')[0];
+    vCard.lastName = shared_media['name'].split(' ').slice(1).join(' ');
+    vCard.email = shared_media['email'];
+    vCard.cellPhone = shared_media['phone'];
+    */
 
     const accts = Object.entries(shared_media).filter(x => x[0] in media);
-    let social_media = [];
-
-
-    for (let i = 0, j = 0; i < accts.length; i++) {
-      if (accts[i][0] in media) {
-        social_media.push(
-
-        );
-      }
-    }
 
     return (
       <View style={styles.view}>
         <Button style={styles.name} onPress={() => Contacts.addContact(newContact, err => console.log)} title={shared_media['name']} />
         {accts.map((x, i) => {
           return (
-            <View style={styles.acct}>
-              <Text key={i} style={styles.result}>
+            <View key={i} jstyle={styles.acct}>
+              <Text style={styles.result}>
                 {x[0]+": "+x[1]}
               </Text>
               <Button style={styles.plus} title="+" onPress={() => Linking.openURL(media[x[0]](x[1])) }/>

@@ -14,7 +14,7 @@ import PropTypes from 'prop-types'
 
 export default class SelectInfo extends Component {
   static navigationOptions = {
-    title: "Select",
+    title: "Contact",
     headerLeft: null,
   };
 
@@ -116,14 +116,15 @@ export default class SelectInfo extends Component {
       } else {
         contents = (
           <View style={styles.container}>
+            <Text h1>{this.state.fields.name}</Text>
             <View style={styles.topView}>
-              <Text h1>{this.state.fields.name}</Text>
               {Object.keys(this.state.fields).map((key, index) => {
                 if (key === "name") {
                   return null;
                 }
                 return (
                   <CheckBox
+                    style={styles.checks}
                     key={index}
                     checked={this._isSelected(key)}
                     onPress={() => this._handleCheckBoxPress(key)}
@@ -152,7 +153,6 @@ export default class SelectInfo extends Component {
 const styles = StyleSheet.create({
   sv: {
     padding: 20,
-    justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#ffffff',
     flex: 1
@@ -160,6 +160,7 @@ const styles = StyleSheet.create({
   topView: {
     flexDirection: 'column',
     alignItems: 'center',
+    width:'100%',
   },
   bottomView: {
     flexDirection: 'column',
@@ -168,11 +169,18 @@ const styles = StyleSheet.create({
   },
   container: {
     flexDirection: 'column',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    height:'100%',
+    width:'100%',
   },
   button: {
     borderRadius: 30,
     height: 40,
     width: 200,
+  },
+  checks: {
+    margin: 7,
+    width: '100%',
   }
 });
