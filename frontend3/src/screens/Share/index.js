@@ -77,8 +77,8 @@ const styles = StyleSheet.create({
   },
   sc: {
     alignContent:"center",
-    height: 100,
-    width: 100,
+    height: 250,
+    width: 250,
     backgroundColor: "#00f",
   },
 })
