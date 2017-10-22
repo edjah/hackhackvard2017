@@ -4,7 +4,8 @@ import {
   ScrollView,
   StyleSheet,
   View,
-  Button
+  Button,
+  Linking
 } from "react-native"
 import PropTypes from "prop-types"
 import QRCode from 'react-native-qrcode-svg';

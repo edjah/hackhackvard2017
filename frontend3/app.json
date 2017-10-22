@@ -1,5 +1,6 @@
 {
   "expo": {
+    "name": "Contact",
     "sdkVersion": "21.0.0",
     "entryPoint": "src/main.js"
   }
