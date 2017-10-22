@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
 import {
-  Text,
   ScrollView,
   StyleSheet,
   View,
   Button,
   Linking
 } from 'react-native'
+import { Text } from 'react-native-elements';
 import PropTypes from 'prop-types'
 import QRCode from 'react-native-qrcode-svg';
 import { Permissions } from 'expo';
@@ -34,7 +34,6 @@ export default class AddFriend extends Component {
   render() {
     const { state } = this.props.navigation;
     const shared_media = state.params.data;
-
     const media = {
       facebook: x => 'https://www.facebook.com/' + x,
       twitter: x => 'https://twitter.com/intent/follow?screen_name=' + x,
@@ -56,29 +55,32 @@ export default class AddFriend extends Component {
       }]
     }
 
-    const accts = Object.entries(shared_media);
-    let social_media = [
-      <Text key={0} style={{color: 'blue'}}
-          onPress={() => Contacts.addContact(newContact, err => console.log)}>
-      {accts[i][0]}
-      </Text>
-    ];
+    const accts = Object.entries(shared_media).filter(x => x[0] in media);
+    let social_media = [];
 
 
-    for (let i = 0, j = 1; i < accts.length; i++) {
+    for (let i = 0, j = 0; i < accts.length; i++) {
       if (accts[i][0] in media) {
         social_media.push(
-          <Text key={j++} style={{color: 'blue'}}
-              onPress={() => Linking.openURL(media[accts[i][0]](accts[i][1]))}>
-          {accts[i][0]}
-          </Text>
+
         );
       }
     }
 
     return (
       <View style={styles.view}>
-        <View> {social_media} </View>
+        <Text h1 style={{color: 'blue'}}
+          onPress={() => Contacts.addContact(newContact, err => console.log)}>
+          {shared_media['name']}
+        </Text>
+        {accts.map((x, i) => {
+          return (
+            <Text key={i} style={{color: 'blue'}}
+              onPress={() => Linking.openURL(media[x[0]](x[1])) }>
+              {x[0]}
+            </Text>
+          );
+        })}
         <Button title='New Contact!' onPress={this.newContact} />
       </View>
     )

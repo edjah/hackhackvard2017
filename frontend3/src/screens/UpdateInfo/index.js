@@ -11,9 +11,7 @@ import {
 } from "react-native";
 import { FormLabel, FormInput } from 'react-native-elements';
 
-// import OAuthManager from 'react-native-oauth';
-
-import PropTypes from "prop-types"
+// import PropTypes from "prop-types"
 
 export default class UpdateInfo extends Component {
   static navigationOptions = {
@@ -55,7 +53,7 @@ export default class UpdateInfo extends Component {
     this.setState({optionalFields: optionalFieldsCopy});
   }
 
-   _addNewField = async (name, value) => {
+  _addNewField = (name, value) => {
     if (name === "") {
       return;
     }
@@ -82,7 +80,7 @@ export default class UpdateInfo extends Component {
 
   _loadOldData = (state) => {
     newRequiredFields = {...this.state.requiredFields};
-    newOptionalFields = {...this.state.optionalFields};
+    newOptionalFields = {};
     for (let e in state.params) {
       if (state.params.hasOwnProperty(e)) {
         if (e === "name" || e === "number") {
@@ -95,13 +93,31 @@ export default class UpdateInfo extends Component {
     this.setState({ requiredFields: newRequiredFields, optionalFields: newOptionalFields, loaded: true });
   }
 
-  render = () => {
+  componentDidMount = () => {
+    // const manager = new OAuthManager('contact');
+    // console.log(manager)
+    // manager.configure({
+    //   twitter: {
+    //     consumer_key: 'c48R8Xcp37vMZnGI38FPTYJvS',
+    //     consumer_secret: 'shixG6oUg5xCYB6LqcDGMdj4yaneiZ1GAZmfK8rbLqHKKnSqNl'
+    //   }
+    // });
+    // manager.authorize('twitter')
+    //   .then(resp => {
+    //     console.log('Your users ID', resp);
+    //   }, e => {
+    //     console.log('There was an error', e);
+    //   });
+
+
     const { state } = this.props.navigation;
 
     if (state.params && !this.state.loaded) {
       this._loadOldData(state);
     }
+  }
 
+  render = () => {
     return (
       <ScrollView style={styles.view}>
         <StatusBar hidden={true}/>

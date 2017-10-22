@@ -51,6 +51,7 @@ export default class Share extends Component {
   render() {
     const { state } = this.props.navigation;
     const qr_string = JSON.stringify(state.params);
+    console.log(state.params);
     return (
       <View style={styles.view}>
           {this.state.scanning &&
