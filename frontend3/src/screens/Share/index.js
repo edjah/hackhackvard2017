@@ -54,7 +54,6 @@ export default class Share extends Component {
   render() {
     const { state } = this.props.navigation;
     const qr_string = JSON.stringify(state.params);
-    let logo = require('../../../assets/qr/fox.png');
     return (
       <View style={styles.view}>
           {this.state.scanning &&
@@ -66,7 +65,7 @@ export default class Share extends Component {
             <Button style={styles.button} title="Done!" onPress={this.toNext} />
           }
           <Divider style={{ backgroundColor: 'blue'}}/>
-          <QRCode value={qr_string} size={280} logo={logo}/>
+          <QRCode value={qr_string} size={280} />
       </View>
     )
   }

@@ -54,10 +54,10 @@ export default class AddFriend extends Component {
 
     return (
       <View style={styles.view}>
-        <Button style={styles.name} onPress={() => Contacts.addContact(newContact, err => console.log)} title={shared_media['name']} />
+        <Button style={styles.name} onPress={() => {}/*Contacts.addContact(newContact, err => console.log)*/} title={shared_media['name']} />
         {accts.map((x, i) => {
           return (
-            <View key={i} jstyle={styles.acct}>
+            <View key={i} style={styles.acct}>
               <Text style={styles.result}>
                 {x[0]+": "+x[1]}
               </Text>
@@ -77,12 +77,6 @@ const styles = StyleSheet.create({
     padding: 10,
     flexDirection:'column',
     alignItems:'center',
-  },
-  sc: {
-    alignContent:'center',
-    height: 1,
-    width: 1,
-    backgroundColor: '#00f',
   },
   name: {
     backgroundColor: '#EFEFEF',

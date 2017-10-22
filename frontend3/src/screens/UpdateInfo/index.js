@@ -80,9 +80,7 @@ export default class UpdateInfo extends Component {
     newRequiredFields = {...this.state.requiredFields};
     for (let e in state.params) {
       if (state.params.hasOwnProperty(e)) {
-        if (e === "name" || e === "number") {
-          newRequiredFields[e] = state.params[e];
-        }
+        newRequiredFields[e] = state.params[e];
       }
     }
     this.setState({ requiredFields: newRequiredFields, loaded: true });
