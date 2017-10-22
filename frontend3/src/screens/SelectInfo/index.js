@@ -21,7 +21,7 @@ export default class SelectInfo extends Component {
     this.state = {
       loaded: false,
       fields: null,
-      selected: new Set()
+      selected: new Set(["name", "number"])
     };
   }
 
@@ -65,7 +65,7 @@ export default class SelectInfo extends Component {
   }
 
   _delete = () => {
-    this.setState({ fields: null, selected: new Set(), loaded: false });
+    this.setState({ fields: null, selected: new Set(["name", "number"]), loaded: false });
     AsyncStorage.removeItem("myInfo");
   }
 
@@ -117,12 +117,11 @@ export default class SelectInfo extends Component {
               return null;
             }
             return (
-              <View key={index}>
-                <CheckBox
-                  checked={this._isSelected(key)}
-                  onPress={() => this._handleCheckBoxPress(key)}
-                  title={`${key.toUpperCase()}: ${this.state.fields[key]}`} />
-              </View>
+              <CheckBox
+                key={index}
+                checked={this._isSelected(key)}
+                onPress={() => this._handleCheckBoxPress(key)}
+                title={`${key.toUpperCase()}: ${this.state.fields[key]}`} />
             );
           })}
           <Button title="SHARE" backgroundColor="#397af8" onPress={this._goToSharing} />

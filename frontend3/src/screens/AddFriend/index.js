@@ -3,7 +3,8 @@ import {
   ScrollView,
   StyleSheet,
   View,
-  Button
+  Button,
+  Linking
 } from "react-native"
 import { Text } from "react-native-elements";
 import PropTypes from "prop-types"
@@ -30,18 +31,17 @@ export default class AddFriend extends Component {
   render() {
     const { state } = this.props.navigation;
     const shared_media = state.params.data;
-    const accts = Object.entries(shared_media);
+    console.log("hello", shared_media);
+    const accts = Object.keys(shared_media);
     console.log(accts);
     return (
       <View style={styles.view}>
-        <Text h1>{accts.name}</Text>
-        <View>
-          {accts.map((acct, i) => {
-            return (
-              <Text key={i}>{acct[0]+": "+acct[1]}</Text>
-            );
-          })}
-        </View>
+        <Text h1>{shared_media.name}</Text>
+        {Object.keys(shared_media).map((key, i) => {
+          return (
+            key === "name" ? null : <Text h3>{key.toUpperCase() + ": " + shared_media[key]}</Text>
+          );
+        })}
         <Button title="New Contact!" onPress={this.newContact} />
       </View>
     )
