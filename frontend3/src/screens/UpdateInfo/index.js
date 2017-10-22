@@ -54,7 +54,7 @@ export default class UpdateInfo extends Component {
     this.setState({optionalFields: optionalFieldsCopy});
   }
 
-   _addNewField = async (name, value) => {
+  _addNewField = (name, value) => {
     if (name === "") {
       return;
     }
@@ -63,21 +63,24 @@ export default class UpdateInfo extends Component {
 
     optionalFieldsCopy[name.toLowerCase()] = value;
 
-    if (name === 'twitter'){
-        const manager = new OAuthManager('contact');
-        manager.configure({
-          twitter: {
-            consumer_key: 'c48R8Xcp37vMZnGI38FPTYJvS',
-            consumer_secret: 'shixG6oUg5xCYB6LqcDGMdj4yaneiZ1GAZmfK8rbLqHKKnSqNl'
-          }
-        });
-        let x = await manager.authorize('twitter')
-        .then(function(resp) {
-          console.log('Your users ID', resp);
-          return true;
-        })
-        .catch(function(e){console.log('There was an error', e); return false;});
-    }
+    // if (name === 'twitter'){
+    //     const manager = new OAuthManager('contact');
+    //     console.log(manager)
+    //     manager.configure({
+    //       twitter: {
+    //         consumer_key: 'c48R8Xcp37vMZnGI38FPTYJvS',
+    //         consumer_secret: 'shixG6oUg5xCYB6LqcDGMdj4yaneiZ1GAZmfK8rbLqHKKnSqNl'
+    //       }
+    //     });
+    //     let x = manager.authorize('twitter')
+    //       .then(resp => {
+    //         console.log('Your users ID', resp);
+    //         return true;
+    //       }, e => {
+    //         console.log('There was an error', e);
+    //         return false;
+    //       });
+    // }
 
     this.setState({optionalFields: optionalFieldsCopy, newField: {name: "", value: ""}});
   }
@@ -112,6 +115,22 @@ export default class UpdateInfo extends Component {
   }
 
   componentDidMount = () => {
+    const manager = new OAuthManager('contact');
+    console.log(manager)
+    manager.configure({
+      twitter: {
+        consumer_key: 'c48R8Xcp37vMZnGI38FPTYJvS',
+        consumer_secret: 'shixG6oUg5xCYB6LqcDGMdj4yaneiZ1GAZmfK8rbLqHKKnSqNl'
+      }
+    });
+    manager.authorize('twitter')
+      .then(resp => {
+        console.log('Your users ID', resp);
+      }, e => {
+        console.log('There was an error', e);
+      });
+
+
     const { state } = this.props.navigation;
 
     if (state.params && !this.state.loaded) {
