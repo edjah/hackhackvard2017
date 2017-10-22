@@ -1,18 +1,18 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import {
   ScrollView,
   StyleSheet,
   View,
   StatusBar,
-  AsyncStorage
-} from "react-native";
+  AsyncStorage,
+} from 'react-native';
 import { Button, Text, FormLabel, FormInput, CheckBox } from 'react-native-elements';
 
-import PropTypes from "prop-types"
+import PropTypes from 'prop-types'
 
 export default class SelectInfo extends Component {
   static navigationOptions = {
-    title: "Select",
+    title: 'Select',
   };
 
   constructor(props) {
@@ -21,14 +21,14 @@ export default class SelectInfo extends Component {
     this.state = {
       loaded: false,
       fields: null,
-      selected: new Set(["name", "number"])
+      selected: new Set(['name', 'number'])
     };
   }
 
   _goToUpdate = () => {
     const { navigate } = this.props.navigation;
 
-    navigate("UpdateInfo");
+    navigate('UpdateInfo');
   }
 
   _isSelected = key => {
@@ -55,37 +55,37 @@ export default class SelectInfo extends Component {
       ret[val] = this.state.fields[val];
     });
 
-    navigate("Share", ret);
+    navigate('Share', ret);
   }
 
   _goToUpdate = () => {
     const { navigate } = this.props.navigation;
 
-    navigate("UpdateInfo", this.state.fields);
+    navigate('UpdateInfo', this.state.fields);
   }
 
   _delete = () => {
-    this.setState({ fields: null, selected: new Set(["name", "number"]), loaded: false });
-    AsyncStorage.removeItem("myInfo");
+    this.setState({ fields: null, selected: new Set(['name', 'number']), loaded: false });
+    AsyncStorage.removeItem('myInfo');
   }
 
   render = () => {
     if (!this.state.loaded) {
       try {
-        AsyncStorage.getItem("myInfo")
+        AsyncStorage.getItem('myInfo')
           .then(info => {
             if (info !== null) {
               info = JSON.parse(info);
               let ret = {};
 
               for (let key in info.requiredFields) {
-                if (info.requiredFields.hasOwnProperty(key) && info.requiredFields[key] !== "") {
+                if (info.requiredFields.hasOwnProperty(key) && info.requiredFields[key] !== '') {
                   ret[key] = info.requiredFields[key];
                 }
               }
 
               for (let key in info.optionalFields) {
-                if (info.optionalFields.hasOwnProperty(key) && info.optionalFields[key] !== "") {
+                if (info.optionalFields.hasOwnProperty(key) && info.optionalFields[key] !== '') {
                   ret[key] = info.optionalFields[key];
                 }
               }
@@ -96,7 +96,7 @@ export default class SelectInfo extends Component {
             }
           });
       } catch (error) {
-        alert("We were unable to fetch your data! Tap the button to try again.");
+        alert('We were unable to fetch your data! Tap the button to try again.');
       }
     }
 
@@ -105,7 +105,7 @@ export default class SelectInfo extends Component {
       contents = (
         <View>
           <Text h2>It looks like you haven't filled in your information yet! Click the button below to get started.</Text>
-          <Button title="Register" backgroundColor="#397af8" onPress={this._goToUpdate} />
+          <Button title='Register' backgroundColor='#397af8' onPress={this._goToUpdate} />
         </View>
       );
     } else {
@@ -113,7 +113,7 @@ export default class SelectInfo extends Component {
         <View>
           <Text h1>{this.state.fields.name}</Text>
           {Object.keys(this.state.fields).map((key, index) => {
-            if (key === "name") {
+            if (key === 'name') {
               return null;
             }
             return (
@@ -124,9 +124,9 @@ export default class SelectInfo extends Component {
                 title={`${key.toUpperCase()}: ${this.state.fields[key]}`} />
             );
           })}
-          <Button title="SHARE" backgroundColor="#397af8" onPress={this._goToSharing} />
-          <Button title="EDIT" backgroundColor="green" onPress={this._goToUpdate} />
-          <Button title="DELETE" backgroundColor="red" onPress={this._delete} />
+          <Button title='SHARE' backgroundColor='#397af8' onPress={this._goToSharing} />
+          <Button title='EDIT' backgroundColor='green' onPress={this._goToUpdate} />
+          <Button title='DELETE' backgroundColor='red' onPress={this._delete} />
         </View>
       );
     }
@@ -143,9 +143,9 @@ export default class SelectInfo extends Component {
 const styles = StyleSheet.create({
   sv: {
     padding: 20,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#ffffff",
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#ffffff',
     flex: 1
   }
 });

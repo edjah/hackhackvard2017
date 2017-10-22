@@ -9,7 +9,6 @@ import {
   AsyncStorage,
   Image,
   KeyboardAvoidingView,
-  Vibration
 } from "react-native";
 import { FormLabel, FormInput } from 'react-native-elements';
 import ModalDropdown from 'react-native-modal-dropdown';
@@ -141,7 +140,7 @@ const styles = StyleSheet.create({
     borderColor: '#E2E1E1',
     flexDirection: 'row',
     justifyContent:'space-between',
-  }, 
+  },
   logo: {
     width: 30,
     height: 30,
