@@ -1,4 +1,4 @@
-const Twitter = require('twitter');
+//import Twitter from 'twitter';
 import OAuthManager from 'react-native-oauth';
 
 const manager = new OAuthManager('contact');
@@ -14,6 +14,7 @@ const twitter_tokens = [
   'mjykMgqc20pSRAYrUMiS3KONftWeqNkGLymlymfjaGfLT'
 ]
 
+/*
 function TwitterApi() {
   manager.authorize('twitter')
   .then(function(resp) {
@@ -58,6 +59,7 @@ function TwitterApi() {
       });
   }
 }
+*/
 
 function GoogleApi() {
   this.client = new GoogleContacts({
@@ -77,7 +79,7 @@ function GoogleApi() {
   }
 }
 
-let t = new TwitterApi();
+//let t = new TwitterApi();
 // t.show_friendship('realDonaldTrump').then(function(x) {
 //   console.log('Friendship:', x);
 //   t.follow_user('realDonaldTrump').then(function(x) {

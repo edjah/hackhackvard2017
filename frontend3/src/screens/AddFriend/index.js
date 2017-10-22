@@ -31,6 +31,7 @@ export default class AddFriend extends Component {
     const { state } = this.props.navigation;
     const shared_media = state.params.data;
     const accts = Object.entries(shared_media);
+    console.log(accts);
     return (
       <View style={styles.view}>
         <View>
