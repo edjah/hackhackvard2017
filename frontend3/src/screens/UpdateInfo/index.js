@@ -23,6 +23,7 @@ export default class UpdateInfo extends Component {
     super(props);
 
     this.state = {
+      loaded: false,
       requiredFields: {
         name: "",
         number: ""
@@ -95,7 +96,28 @@ export default class UpdateInfo extends Component {
     }
   }
 
+  _loadOldData = (state) => {
+    newRequiredFields = {...this.state.requiredFields};
+    newOptionalFields = {...this.state.optionalFields};
+    for (let e in state.params) {
+      if (state.params.hasOwnProperty(e)) {
+        if (e === "name" || e === "number") {
+          newRequiredFields[e] = state.params[e];
+        } else {
+          newOptionalFields[e] = state.params[e];
+        }
+      }
+    }
+    this.setState({ requiredFields: newRequiredFields, optionalFields: newOptionalFields, loaded: true });
+  }
+
   render = () => {
+    const { state } = this.props.navigation;
+
+    if (state.params && !this.state.loaded) {
+      this._loadOldData(state);
+    }
+
     return (
       <ScrollView style={styles.view}>
         <StatusBar hidden={true}/>

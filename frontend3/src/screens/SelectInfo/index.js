@@ -58,6 +58,17 @@ export default class SelectInfo extends Component {
     navigate("Share", ret);
   }
 
+  _goToUpdate = () => {
+    const { navigate } = this.props.navigation;
+
+    navigate("UpdateInfo", this.state.fields);
+  }
+
+  _delete = () => {
+    this.setState({ fields: null, selected: new Set(), loaded: false });
+    AsyncStorage.removeItem("myInfo");
+  }
+
   render = () => {
     if (!this.state.loaded) {
       try {
@@ -86,7 +97,6 @@ export default class SelectInfo extends Component {
           });
       } catch (error) {
         alert("We were unable to fetch your data! Tap the button to try again.");
-        contents = <Text>Hello</Text>;
       }
     }
 
@@ -94,8 +104,8 @@ export default class SelectInfo extends Component {
     if (!this.state.fields) {
       contents = (
         <View>
-          <Text>It looks like you haven't filled in your information yet! Click the button below to get started.</Text>
-          <Button title="Register" onPress={this._goToUpdate} />
+          <Text h2>It looks like you haven't filled in your information yet! Click the button below to get started.</Text>
+          <Button title="Register" backgroundColor="#397af8" onPress={this._goToUpdate} />
         </View>
       );
     } else {
@@ -116,6 +126,8 @@ export default class SelectInfo extends Component {
             );
           })}
           <Button title="SHARE" backgroundColor="#397af8" onPress={this._goToSharing} />
+          <Button title="EDIT" backgroundColor="green" onPress={this._goToUpdate} />
+          <Button title="DELETE" backgroundColor="red" onPress={this._delete} />
         </View>
       );
     }
