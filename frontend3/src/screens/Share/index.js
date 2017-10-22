@@ -4,15 +4,18 @@ import {
   ScrollView,
   StyleSheet,
   View,
-  Button,
   Vibration
 } from "react-native"
 import PropTypes from "prop-types"
 import QRCode from 'react-native-qrcode-svg';
 import { Permissions } from 'expo';
 import {
-  Scanner
+  Scanner,
+  Button
 } from '../../components'
+import {
+  Divider
+} from 'react-native-elements'
 
 export default class Share extends Component {
   static navigationOptions = {
@@ -60,9 +63,10 @@ export default class Share extends Component {
             </View>
           }
           {this.state.buttonVisible &&
-            <Button title="Done!" onPress={this.toNext} />
+            <Button style={styles.button} title="Done!" onPress={this.toNext} />
           }
-          <QRCode value={qr_string} size={300}/>
+          <Divider style={{ backgroundColor: 'blue'}}/>
+          <QRCode value={qr_string} size={280}/>
       </View>
     )
   }
@@ -79,7 +83,13 @@ const styles = StyleSheet.create({
   },
   sc: {
     alignContent:"center",
-    height: 250,
-    width: 250,
+    height: 260,
+    width: 260,
   },
+  button: {
+    marginTop: 20,
+    borderRadius: 20,
+    height: 100,
+    width: 100,
+  }
 })

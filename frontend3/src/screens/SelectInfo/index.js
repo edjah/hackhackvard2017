@@ -108,9 +108,9 @@ export default class SelectInfo extends Component {
     if (this.state.loaded) {
       if (!this.state.fields) {
         contents = (
-          <View>
+          <View style={styles.container}>
             <Text h2>It looks like you haven't filled in your information yet! Click the button below to get started.</Text>
-            <Button title="Register" backgroundColor="#397af8" onPress={this._goToUpdate} />
+            <Button style={styles.button} title="Register" backgroundColor="#397af8" onPress={this._goToUpdate} />
           </View>
         );
       } else {
@@ -170,9 +170,9 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'space-between'
   },
-  buttonWrap: {
-    borderRadius: 15,
-    height: 20,
-    width: 100,
+  button: {
+    borderRadius: 30,
+    height: 40,
+    width: 200,
   }
 });

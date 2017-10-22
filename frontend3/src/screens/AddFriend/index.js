@@ -71,19 +71,18 @@ export default class AddFriend extends Component {
 
     return (
       <View style={styles.view}>
-        <Text h1 style={{color: 'blue'}}
-          onPress={() => Contacts.addContact(newContact, err => console.log)}>
-          {shared_media['name']}
-        </Text>
+        <Button style={styles.name} onPress={() => Contacts.addContact(newContact, err => console.log)} title={shared_media['name']} />
         {accts.map((x, i) => {
           return (
-            <Text key={i} style={{color: 'blue'}}
-              onPress={() => Linking.openURL(media[x[0]](x[1])) }>
-              {x[0]}
-            </Text>
+            <View style={styles.acct}>
+              <Text key={i} style={styles.result}>
+                {x[0]+": "+x[1]}
+              </Text>
+              <Button style={styles.plus} title="+" onPress={() => Linking.openURL(media[x[0]](x[1])) }/>
+            </View>
           );
         })}
-        <Button title='Return' onPress={this.goBack} />
+        <Button style={styles.back} title='Return' onPress={this.goBack} />
       </View>
     )
   }
@@ -92,8 +91,7 @@ export default class AddFriend extends Component {
 const styles = StyleSheet.create({
   view: {
     flex: 1,
-    paddingTop: 10,
-    paddingBottom: 10,
+    padding: 10,
     flexDirection:'column',
     alignItems:'center',
   },
@@ -103,4 +101,38 @@ const styles = StyleSheet.create({
     width: 1,
     backgroundColor: '#00f',
   },
+  name: {
+    backgroundColor: '#EFEFEF',
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
+  },
+  acct: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: '100%',
+    height: 60,
+    backgroundColor: '#EFEFEF',
+    borderWidth: 1,
+    borderTopWidth: 0,
+    padding: 10,
+    borderColor: '#E2E1E1',
+  },
+  result: {
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  plus: {
+    borderRadius: 10,
+    height: 40,
+    width: 40,
+  },
+  back: {
+    borderRadius: 30,
+    height: 35,
+    width: 300,
+    marginTop: 20,
+  }
 })
