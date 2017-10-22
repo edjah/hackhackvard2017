@@ -28,7 +28,6 @@ export default class Share extends Component {
   }
 
   onRead = (t, e) => {
-    console.log(e);
     let accts = JSON.parse(e);
     if (t === "QR_CODE" /* && make sure data contains at least one acct we have */){
       this.setState({buttonVisible: true, scanning: false, data: accts});
@@ -77,8 +76,7 @@ const styles = StyleSheet.create({
   },
   sc: {
     alignContent:"center",
-    height: 100,
-    width: 100,
-    backgroundColor: "#00f",
+    height: 250,
+    width: 250,
   },
 })

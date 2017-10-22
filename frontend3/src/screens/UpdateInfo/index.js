@@ -9,6 +9,8 @@ import {
   AsyncStorage
 } from "react-native";
 import { FormLabel, FormInput } from 'react-native-elements';
+//import TwitterApi from '../../../api.js';
+import OAuthManager from 'react-native-oauth';
 
 import PropTypes from "prop-types"
 
@@ -51,7 +53,7 @@ export default class UpdateInfo extends Component {
     this.setState({optionalFields: optionalFieldsCopy});
   }
 
-  _addNewField = (name, value) => {
+   _addNewField = async (name, value) => {
     if (name === "") {
       return;
     }
@@ -59,6 +61,22 @@ export default class UpdateInfo extends Component {
     optionalFieldsCopy = {...this.state.optionalFields};
 
     optionalFieldsCopy[name.toLowerCase()] = value;
+
+    if (name === 'twitter'){
+        const manager = new OAuthManager('contact');
+        manager.configure({
+          twitter: {
+            consumer_key: 'c48R8Xcp37vMZnGI38FPTYJvS',
+            consumer_secret: 'shixG6oUg5xCYB6LqcDGMdj4yaneiZ1GAZmfK8rbLqHKKnSqNl'
+          }
+        });
+        let x = await manager.authorize('twitter')
+        .then(function(resp) {
+          console.log('Your users ID', resp);
+          return true;
+        })
+        .catch(function(e){console.log('There was an error', e); return false;});
+    }
 
     this.setState({optionalFields: optionalFieldsCopy, newField: {name: "", value: ""}});
   }

@@ -25,9 +25,9 @@ export default class Scanner extends React.Component {
     const { hasCameraPermission } = this.state;
 
     if (hasCameraPermission === null) {
-      return <Text>Requesting for camera permission</Text>;
+      return <Text></Text>;
     } else if (hasCameraPermission === false) {
-      return <Text>No access to camera</Text>;
+      return <Text></Text>;
     } else {
       return (
         <View style={{ flex: 1 }}>
@@ -44,17 +44,5 @@ export default class Scanner extends React.Component {
   _handleBarCodeRead = ({ type, data }) => {
     this.props.onRead(type, data);
   }
-  /*
-  _handleBarCodeRead(e) {
-    if (!this.state.scanning) {
-      Vibration.vibrate();
-      this._setScanning(true);
-      this.props.onRead(e)
-      if (this.props.reactivate) {
-        setTimeout(() => (this._setScanning(false)), this.props.reactivateTimeout);
-      }
-    }
-  }
-  */
 }
 
