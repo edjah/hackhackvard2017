@@ -3,11 +3,10 @@ import {
   ScrollView,
   StyleSheet,
   View,
-  Button,
   StatusBar,
   AsyncStorage
 } from "react-native";
-import { Text, FormLabel, FormInput, CheckBox } from 'react-native-elements';
+import { Button, Text, FormLabel, FormInput, CheckBox } from 'react-native-elements';
 
 import PropTypes from "prop-types"
 
@@ -46,6 +45,17 @@ export default class SelectInfo extends Component {
     }
 
     this.setState({ selected: newSet });
+  }
+
+  _goToSharing = () => {
+    const { navigate } = this.props.navigation;
+
+    let ret = {};
+    this.state.selected.forEach(val => {
+      ret[val] = this.state.fields[val];
+    });
+
+    navigate("Share", ret);
   }
 
   render = () => {
@@ -105,6 +115,7 @@ export default class SelectInfo extends Component {
               </View>
             );
           })}
+          <Button title="SHARE" backgroundColor="#397af8" onPress={this._goToSharing} />
         </View>
       );
     }
