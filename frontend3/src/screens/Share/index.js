@@ -48,6 +48,8 @@ export default class Share extends Component {
   }
 
   render() {
+    const { state } = this.props.navigation;
+    const qr_string = JSON.stringify(state.params);
     return (
       <View style={styles.view}>
           {this.state.scanning &&
@@ -58,7 +60,7 @@ export default class Share extends Component {
           {this.state.buttonVisible &&
             <Button title="Done!" onPress={this.toNext} />
           }
-          <QRCode value='{"facebook": "hello world"}' size={300}/>
+          <QRCode value={qr_string} size={300}/>
       </View>
     )
   }

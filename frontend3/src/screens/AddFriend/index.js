@@ -24,7 +24,7 @@ export default class AddFriend extends Component {
 
   newContact = () => {
     const { navigate } = this.props.navigation;
-    navigate(/*old page*/)l
+    //navigate(/*old page*/)
   }
 
   render() {
