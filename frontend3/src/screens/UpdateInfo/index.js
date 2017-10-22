@@ -6,19 +6,17 @@ import {
   View,
   Button,
   StatusBar,
-  AsyncStorage
+  AsyncStorage,
+  Image,
+  KeyboardAvoidingView
 } from "react-native";
 import { FormLabel, FormInput } from 'react-native-elements';
-//import TwitterApi from '../../../api.js';
-import OAuthManager from 'react-native-oauth';
+import ModalDropdown from 'react-native-modal-dropdown';
+import { HeaderBackButton } from 'react-navigation';
 
 import PropTypes from "prop-types"
 
 export default class UpdateInfo extends Component {
-  static navigationOptions = {
-    title: 'Info',
-  }
-
   constructor(props) {
     super(props);
 
@@ -26,60 +24,39 @@ export default class UpdateInfo extends Component {
       loaded: false,
       requiredFields: {
         name: "",
-        number: ""
-      },
-      optionalFields: {
+        number: "",
+        facebook: "",
         email: "",
-        facebook: ""
+        twitter: "",
+        instagram: "",
+        linkedin: "",
+        snapchat: "",
       },
-      newField: {
-        name: "",
-        value: ""
-      }
     };
   }
+
+
+  static navigationOptions = ({ navigation }) => {
+    const {params = {}} = navigation.state;
+    return {
+      title: 'Info',
+      headerLeft: <HeaderBackButton onPress={() => params.beforeLeave()} />
+    }
+  }
+
 
   _handleRequiredFieldChange = (text, key) => {
     this.setState({requiredFields: {...this.state.requiredFields, [key]: text}});
   }
 
-  _handleOptionalFieldChange = (text, key) => {
-    this.setState({optionalFields: {...this.state.optionalFields, [key]: text}});
-  }
-
-  _deleteField = key => {
-    optionalFieldsCopy = {...this.state.optionalFields};
-
-    delete optionalFieldsCopy[key];
-    this.setState({optionalFields: optionalFieldsCopy});
-  }
-
-   _addNewField = async (name, value) => {
-    if (name === "") {
-      return;
+  componentWillMount() {
+    this.props.navigation.setParams({
+      beforeLeave: this._done
+    });
+    const { state } = this.props.navigation;
+    if (state.params && !this.state.loaded) {
+      this._loadOldData(state);
     }
-
-    optionalFieldsCopy = {...this.state.optionalFields};
-
-    optionalFieldsCopy[name.toLowerCase()] = value;
-
-    if (name === 'twitter'){
-        const manager = new OAuthManager('contact');
-        manager.configure({
-          twitter: {
-            consumer_key: 'c48R8Xcp37vMZnGI38FPTYJvS',
-            consumer_secret: 'shixG6oUg5xCYB6LqcDGMdj4yaneiZ1GAZmfK8rbLqHKKnSqNl'
-          }
-        });
-        let x = await manager.authorize('twitter')
-        .then(function(resp) {
-          console.log('Your users ID', resp);
-          return true;
-        })
-        .catch(function(e){console.log('There was an error', e); return false;});
-    }
-
-    this.setState({optionalFields: optionalFieldsCopy, newField: {name: "", value: ""}});
   }
 
   _done = () => {
@@ -96,35 +73,42 @@ export default class UpdateInfo extends Component {
     }
   }
 
+  getTintStyle = (active) => {
+    return active ? {} : {tintColor: "#898989"};
+  }
+
   _loadOldData = (state) => {
     newRequiredFields = {...this.state.requiredFields};
-    newOptionalFields = {...this.state.optionalFields};
     for (let e in state.params) {
       if (state.params.hasOwnProperty(e)) {
         if (e === "name" || e === "number") {
           newRequiredFields[e] = state.params[e];
-        } else {
-          newOptionalFields[e] = state.params[e];
         }
       }
     }
-    this.setState({ requiredFields: newRequiredFields, optionalFields: newOptionalFields, loaded: true });
+    this.setState({ requiredFields: newRequiredFields, loaded: true });
   }
 
   render = () => {
-    const { state } = this.props.navigation;
-
-    if (state.params && !this.state.loaded) {
-      this._loadOldData(state);
+    const LOGOS = {
+      name: require('../../../assets/name.png'),
+      number: require('../../../assets/number.png'),
+      facebook: require('../../../assets/facebook.png'),
+      email: require('../../../assets/email.png'),
+      twitter: require('../../../assets/twitter.png'),
+      instagram: require('../../../assets/instagram.png'),
+      linkedin: require('../../../assets/linkedin.png'),
+      snapchat: require('../../../assets/snapchat.png'),
     }
 
     return (
       <ScrollView style={styles.view}>
-        <StatusBar hidden={true}/>
+        <KeyboardAvoidingView>
         {Object.keys(this.state.requiredFields).map((key, index) => {
+          var str = '../../../assets/'+key+'.png';
           return (
-            <View key={index}>
-              <FormLabel>{key.toUpperCase()}</FormLabel>
+            <View key={index} style={styles.listItem}>
+              <Image style={[styles.logo, this.getTintStyle(this.state.requiredFields[key] !== "")]} source={LOGOS[key]} />
               <FormInput
                 onChangeText={(text) => this._handleRequiredFieldChange(text, key)}
                 placeholder={`Please enter your ${key}`}
@@ -132,35 +116,7 @@ export default class UpdateInfo extends Component {
             </View>
           );
         })}
-        {Object.keys(this.state.optionalFields).map((key, index) => {
-          return (
-            <View key={index}>
-              <FormLabel>{key.toUpperCase()}</FormLabel>
-              <View>
-                <FormInput
-                  onChangeText={(text) => this._handleOptionalFieldChange(text, key)}
-                  placeholder={`(Optional) Please enter your ${key}`}
-                  value={this.state.optionalFields[key]} />
-                <Button title="X" onPress={() => this._deleteField(key)} />
-              </View>
-            </View>
-          );
-        })}
-        <FormLabel>NEW FIELD</FormLabel>
-        <FormInput
-          onChangeText={(text) => this.setState({newField: {...this.state.newField, name: text}})}
-          placeholder="Name of new field"
-          value={this.state.newField.name} />
-        <FormInput
-          onChangeText={(text) => this.setState({newField: {...this.state.newField, value: text}})}
-          placeholder="Value"
-          value={this.state.newField.value} />
-        <Button
-          onPress={() => this._addNewField(this.state.newField.name, this.state.newField.value)}
-          title="Add new field" />
-        <View style={{height: 10}} />
-        <Button onPress={this._done} title="Done!"/>
-        <View style={{height: 10}} />
+        </KeyboardAvoidingView>
       </ScrollView>
     )
   }
@@ -169,9 +125,27 @@ export default class UpdateInfo extends Component {
 const styles = StyleSheet.create({
   view: {
     flex: 1,
-    paddingLeft: 20,
-    paddingRight: 20,
     backgroundColor: "#ffffff"
+  },
+  itemHead: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  listItem: {
+    paddingTop:10,
+    paddingBottom:10,
+    width: "100%",
+    backgroundColor: '#EFEFEF',
+    borderWidth: 1,
+    borderTopWidth: 0,
+    borderColor: '#E2E1E1',
+    flexDirection: 'row',
+    justifyContent:'space-between',
+  }, 
+  logo: {
+    width: 30,
+    height: 30,
+    margin: 10,
   }
 });
 
